@@ -72,11 +72,12 @@ function validateURL2(urls) {
     });
 };
 
-function countUrls(urls){
+function countUrls(urls) {
   const nCountLinks = urls.length;
 
   return nCountLinks;
 }
+
 function statisticsOfUrls(urls) {
   const uniqueLinks = [];
 
@@ -86,7 +87,6 @@ function statisticsOfUrls(urls) {
     }
   });
 
-  // const totalLinks = urls.length;
   const totalUnique = uniqueLinks.length;
 
   return totalUnique;
@@ -99,7 +99,7 @@ function statisticsBrokenUrls(urls) {
     if (link.ok !== 'ok') {
       count++;
     }
-    
+
     return count;
   }
 }

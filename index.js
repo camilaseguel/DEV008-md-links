@@ -90,13 +90,13 @@ const mdLinks = (path, options) => {
   })
 };
 
-mdLinks('README.md', { validate: false, stats: true })
-  .then((result) => {
-    console.log(result)
-  })
-  .catch((error) => {
-    console.log(error)
-  });
+// mdLinks('README.md', { validate: false, stats: true })
+//   .then((result) => {
+//     console.log(result)
+//   })
+//   .catch((error) => {
+//     console.log(error)
+//   });
 
 module.exports = {
   mdLinks

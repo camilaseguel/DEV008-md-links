@@ -38,7 +38,6 @@ describe('debería retornar algo', () => {
   });
   it('countUrls should be a function', () => {
     const array = [1, 2, 3, 4, 5];
-    const newArray = array.length;
     const result = functions.countUrls(array);
     expect(typeof result).toBe('number');
   });

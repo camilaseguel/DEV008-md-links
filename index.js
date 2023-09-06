@@ -1,11 +1,12 @@
 const { routeExist, routeAbsolut, isFile, readFile, pathResolve, extensionMDFile, validateURL2, statisticsOfUrls, statisticsBrokenUrls, countUrls } = require('./function.js')
 
-const [, , ...args] = process.argv
-const route = args[0];
-const option = args[1];
+// const [, , ...args] = process.argv
+// const route = args[0];
+// const option = args[1];
 
 
 const mdLinks = (path, options) => {
+  
   return new Promise((resolve, reject) => {
     if (routeExist(path)) {
       // resolve('path exist');
@@ -19,6 +20,7 @@ const mdLinks = (path, options) => {
         finalPath = absolutPath;
       }
       if (isFile(finalPath)) {
+        
         if (extensionMDFile(finalPath)) {
           //resolve ('is .md')
           readFile(finalPath).then((fileContent) => {
@@ -37,12 +39,17 @@ const mdLinks = (path, options) => {
             })
 
             const promiseArray = [];
+            
 
             if (options.validate === true && options.stats === false) {
+              
+
               urls.forEach((item) => {
+                console.log('hola')
                 promiseArray.push(validateURL2(item))
               })
               Promise.all(promiseArray).then((responses) => {
+                
                 resolve(responses)
 
               }).catch((errors) => {
@@ -55,21 +62,15 @@ const mdLinks = (path, options) => {
               })
             } else if (
               options.validate === false && options.stats === true) {
-              const totalCountUrls = countUrls(urls);
-              const totalUniqueLinks = statisticsOfUrls(urls);
-
-              resolve({
-                total: totalCountUrls,
-                unique: totalUniqueLinks,
+              return ({
+                total: countUrls(urls),
+                unique: statisticsOfUrls(urls),
               });
             } else if (
               options.validate === true && options.stats === true) {
-              const totalCountUrls = countUrls(urls);
-              const totalUniqueLinks = statisticsOfUrls(urls);
-
               resolve({
-                total: totalCountUrls,
-                unique: totalUniqueLinks,
+                total: countUrls(urls),
+                unique: statisticsOfUrls(urls),
                 broken: statisticsBrokenUrls(urls)
               })
             }
@@ -90,14 +91,14 @@ const mdLinks = (path, options) => {
   })
 };
 
-// mdLinks('README.md', { validate: false, stats: true })
-//   .then((result) => {
-//     console.log(result)
-//   })
-//   .catch((error) => {
-//     console.log(error)
-//   });
+mdLinks('README.md', { validate: true })
+  .then((result) => {
+    console.log(result)
+  })
+  .catch((error) => {
+    console.log(error)
+  });
 
-module.exports = {
-  mdLinks
-};
+// module.exports = {
+//   mdLinks
+// };

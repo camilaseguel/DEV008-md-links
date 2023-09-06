@@ -4,13 +4,13 @@ console.log(args)
 const route = args[0];
 const validate = args.includes('--validate');
 const stats = args.includes('--stats');
-const option = { validate, stats };
-console.log(option)
+const options = { validate, stats };
+console.log(options)
 
-mdLinks(route, option)
-.then(()=>{
-//si options es = =  a validate
-})
+mdLinks(route, options)
+// .then(()=>{
+// //si options es = =  a validate
+// })
 .catch((error)=>{
     console.log(error)
 })

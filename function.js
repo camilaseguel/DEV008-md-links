@@ -104,7 +104,6 @@ function statisticsBrokenUrls(urls) {
   }
 }
 
-
 module.exports = {
   routeExist,
   routeAbsolut,

@@ -1,11 +1,7 @@
-const { routeExist, routeAbsolut, isFile, readFile, pathResolve, extensionMDFile, validateURL } = require('./function.js')
-
-const [, , ...args] = process.argv
-const route = args[0];
-const option = args[1];
-
+const { routeExist, routeAbsolut, isFile, readFile, pathResolve, extensionMDFile, validateURL, statisticsOfUrls, statisticsBrokenUrls, countUrls } = require('./function.js')
 
 const mdLinks = (path, options) => {
+  
   return new Promise((resolve, reject) => {
     if (routeExist(path)) {
       // resolve('path exist');
@@ -19,13 +15,14 @@ const mdLinks = (path, options) => {
         finalPath = absolutPath;
       }
       if (isFile(finalPath)) {
+        
         if (extensionMDFile(finalPath)) {
           //resolve ('is .md')
           readFile(finalPath).then((fileContent) => {
             let urls = [];
             const regex = /\[[^\[\]]*\]\((http|https):\/\/[^\(\)]+\)/g;
             const result = fileContent.match(regex);
-            //console.log(result)
+
             result.forEach((item) => {
               // console.log(item.slice(1, item.indexOf(']')));
               // console.log(item.slice(item.indexOf('(') + 1, item.length - 1));
@@ -35,9 +32,41 @@ const mdLinks = (path, options) => {
                 route: finalPath
               });
             })
-            urls.forEach((item) => {
-              validateURL(item)
-            })
+
+            const promiseArray = [];
+            
+
+            if (options.validate === true && options.stats === false) {
+            
+              urls.forEach((item) => {
+                
+                promiseArray.push(validateURL(item))
+              })
+              Promise.all(promiseArray).then((responses) => {
+  
+                resolve(responses)
+
+              }).catch((errors) => {
+                console.log(errors)
+              })
+            } else if (
+              options.validate === false && options.stats === false) {
+              resolve(urls)
+            } else if (
+              options.validate === false && options.stats === true) {
+              resolve({
+                total: countUrls(urls),
+                unique: statisticsOfUrls(urls),
+              });
+            } else if (
+              options.validate === true && options.stats === true) {
+              resolve({
+                total: countUrls(urls),
+                unique: statisticsOfUrls(urls),
+                broken: statisticsBrokenUrls(urls)
+              })
+            }
+
           }).catch((error) => {
             reject(error)
           })
@@ -54,13 +83,6 @@ const mdLinks = (path, options) => {
   })
 };
 
-mdLinks('README.md', {})
-  .then((result) => {
-    console.log(result)
-  })
-  .catch((error) => {
-    console.log(error)
-  });
 
 module.exports = {
   mdLinks

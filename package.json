@@ -20,6 +20,6 @@
   "author": "Camila Seguel",
   "license": "ISC",
   "bin": {
-    "md-links": "index.js"
+    "md-links": "cli.js"
   }
 }

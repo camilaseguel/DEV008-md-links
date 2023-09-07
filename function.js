@@ -56,75 +56,53 @@ const readFile = (route) => {
 };
 
 
-/*
-//fs.readdirSync => Muestra los nombres de los archivos dentro de un directorio. Método sincronico.
-function readDirectory(route){
-  return fs.readdirSync(route)
-}
-// console.log(readDirectory('foldertest'))
-
-function extensionMDFileInDirectory(route) {
-  const filesInDirectory = fs.readdirSync(__dirname);
-  let links = [];
-
-  filesInDirectory.forEach(filePath => {
-    if (path.extname(filePath) === '.md')
-      links.push(filePath);
-  });
-  console.log(links);
-}
-extensionMDFileInDirectory(route);
-*/
-
-/*//usando regex y .match(), logro extraer en un array los links del archivo
-function getLinksFiles(fileMD) {
-  console.log(fileMD, 'archivoMD')
-  let urls = [];
-  const regex = /\[[^\[\]]*\]\((http|https):\/\/[^\(\)]+\)/g;
-  const resultado = fileMD.match(regex);
-  console.log(resultado, 'este es archivo .md')
-  resultado.forEach((item) => {
-    // console.log(item.slice(1, item.indexOf(']')));
-    // console.log(item.slice(item.indexOf('(') + 1, item.length - 1));
-    urls.push({
-      text: item.slice(1, item.indexOf(']')),
-      href: item.slice(item.indexOf('(') + 1, item.length - 1)
-    }
-    );
-  })
-  return urls;
-  // urls.forEach((item) => {
-  //   validateURL(item.href);
-  // })
-};
-console.log(getLinksFiles(readFile('pruebass.md')))
-
-*/
+//Peticiones al servidor con FETCH()
 function validateURL(urls) {
-  //console.log(urls, 'fetch')
-  fetch(urls.href)
- 
+  return fetch(urls.href)
     .then(response => {
-      // if (response.ok)
-      // return response.txt();
-      const statusLink = {
+      return {
         text: urls.text,
         href: urls.href,
         status: response.status,
         message: response.statusText,
         file: urls.route
       }
-      // console.log(response.status);
-      console.log(statusLink);
     })
-    // .then(data => {
-    //     console.log('datos:' + data);
-    // })
     .catch(err => {
-      console.error('ERROR:', err.message)
     });
 };
-//Text,href,file,status,mensaje
+
+function countUrls(urls) {
+  const nCountLinks = urls.length;
+
+  return nCountLinks;
+}
+
+function statisticsOfUrls(urls) {
+  const uniqueLinks = [];
+
+  urls.forEach((item) => {
+    if (!uniqueLinks.includes(item.href)) {
+      uniqueLinks.push(item.href);
+    }
+  });
+
+  const totalUnique = uniqueLinks.length;
+
+  return totalUnique;
+}
+
+function statisticsBrokenUrls(urls) {
+  let count = 0;
+
+  for (const link of urls) {
+    if (link.ok !== 'ok') {
+      count++;
+    }
+
+    return count;
+  }
+}
 
 module.exports = {
   routeExist,
@@ -132,9 +110,11 @@ module.exports = {
   isFile,
   readFile,
   pathResolve,
-  //extensionMDFileInDirectory,
   extensionMDFile,
-  //getLinksFiles
-  validateURL
+  validateURL,
+  countUrls,
+  statisticsOfUrls,
+  statisticsBrokenUrls
+
 };
 

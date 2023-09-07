@@ -57,7 +57,7 @@ const readFile = (route) => {
 
 
 //Peticiones al servidor con FETCH()
-function validateURL2(urls) {
+function validateURL(urls) {
   return fetch(urls.href)
     .then(response => {
       return {
@@ -111,7 +111,7 @@ module.exports = {
   readFile,
   pathResolve,
   extensionMDFile,
-  validateURL2,
+  validateURL,
   countUrls,
   statisticsOfUrls,
   statisticsBrokenUrls

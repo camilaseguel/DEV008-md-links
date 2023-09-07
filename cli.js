@@ -5,12 +5,13 @@ const route = args[0];
 const validate = args.includes('--validate');
 const stats = args.includes('--stats');
 const options = { validate, stats };
-console.log(options)
+//console.log(options)
 
 mdLinks(route, options)
-// .then(()=>{
+.then((result)=>{
+    console.log(result)
 // //si options es = =  a validate
-// })
+})
 .catch((error)=>{
     console.log(error)
 })
